@@ -20,7 +20,8 @@ USEFUL LINKS:
 #define RED 1
 #define BLACK 0
 #include<iostream>
-using namespace std;
+#include<string>
+#include<regex>  //Note : THIS REQUIRES ' -std=c++11 ' to be enabled in compiler options
 
 
 class Tree
@@ -29,10 +30,11 @@ class Tree
     class Node
     {
         public:
-        int value,color;
+        std::string value;
+        int color;
         Node *left, *right , *parent;
 
-        Node(int data)  //parametrised constructor
+        Node(std::string data)  //parametrised constructor
         {
         value = data;
         color = RED;    //by default a node will have color as RED
@@ -43,18 +45,31 @@ class Tree
 
     Node* root;
     Node* nill;
+
     Tree()
     {
         root = NULL;
-        cout<<"Red - "<<RED<<" and Black - "<<BLACK<<endl<<endl;
-        nill = new Node(-1);
+        //
+        //std::cout<<"Red - "<<RED<<" and Black - "<<BLACK<<std::endl<<std::endl;
+        //
+        nill = new Node("-1");
         nill->color = BLACK;
         nill->left = nill->right = nill->parent = NULL;
     }
     //Tree() Constructor ends
 
-    void insert(int data)
+    bool validate(std::string reg)
     {
+        std:: regex expression("[[:d:]]{2}[a-zA-Z]{3}[[:d:]]{4}");
+        bool match = regex_match(reg,expression);
+        return match;
+    }
+    void insert(std::string data)
+    {
+        if(validate(data))
+        {
+
+        //Note: When comparing two register numbers, we can directly use '>' and '<' on the strings and get the result
         Node* new_node = new Node(data);
         new_node->left = nill;
         new_node->right = nill;
@@ -90,8 +105,17 @@ class Tree
             //do nothing
         }
         //now resolve conflict of adjacent red nodes if occurred
-            cout<<data<<" inserted."<<" Resolve conflict if occurred"<<endl;
+            //
+            //std::cout<<data<<" inserted."<<" Resolve conflict if occurred"<<std::endl;
+            //
             resolve_insertion(new_node);
+
+        }//if for validation ends
+        else
+        {
+            //VALIDATION FOR INPUT failed
+            std::cout<<"--\""<<data<<"\" is an INVALID reg. no."<<std::endl<<std::endl;
+        }
     }
     //insert() ends
 
@@ -101,17 +125,22 @@ class Tree
        Node* uncle = NULL;
        while(x != root && x->parent->color == RED)
        {
-            cout<<"    Iteration "<<counter++<<": Conflict occurred for "<<x->value<<endl;
+            //
+            //std::cout<<"    Iteration "<<counter++<<": Conflict occurred for "<<x->value<<std::endl;
+            //
             if( x->parent == x->parent->parent->left ) //if parent of 'x' is a left child
-            {
-                    cout<<"       parent("<<x->parent->value<<") is a LEFT child"<<endl;
+            {       //
+                    //std::cout<<"       parent("<<x->parent->value<<") is a LEFT child"<<std::endl;
+                    //
                     uncle = x->parent->parent->right;
                     //
-                    cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<endl;
+                    //std::cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<std::endl;
                     //
                     if(uncle->color == RED ) //CASE 1
                     {
-                        cout<<"        uncle("<<uncle->value<<") is red"<<uncle->color<<endl;
+                        //
+                        //std::cout<<"        uncle("<<uncle->value<<") is red"<<uncle->color<<std::endl;
+                        //
                         x->parent->color = BLACK;
                         uncle->color = BLACK;
                         x->parent->parent->color = RED;
@@ -125,7 +154,9 @@ class Tree
 
                     }//Case 2 transforms into Case 3
                     //Case 3 - 'x' is a left child and uncle is black/NULL
-                    cout<<"        uncle("<<uncle->value<<") is black"<<endl;
+                    //
+                    //std::cout<<"        uncle("<<uncle->value<<") is black"<<std::endl;
+                    //
                     x->parent->color = BLACK;
                     x->parent->parent->color = RED;
                     right_rotate(x->parent->parent);
@@ -133,16 +164,19 @@ class Tree
 
             }
             else    //if parent of 'x' is a right child
-            {   //interchange left <--> right from above block
-                ///////if there are problems, try changing interchanging left_rotate and right_rotate here//////////////////
-                    cout<<"       parent("<<x->parent->value<<") is a RIGHT child"<<endl;
+            {   //interchanging left <--> right from above block
+                    //
+                    //std::cout<<"       parent("<<x->parent->value<<") is a RIGHT child"<<std::endl;
+                    //
                     uncle = x->parent->parent->left;
                     //
-                    cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<endl;
+                    //std::cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<std::endl;
                     //
                     if( uncle->color == RED) //CASE 1
                     {
-                        cout<<"        uncle("<<uncle->value<<") is red"<<endl;
+                        //
+                        //std::cout<<"        uncle("<<uncle->value<<") is red"<<std::endl;
+                        //
                         x->parent->color = BLACK;
                         uncle->color = BLACK;
                         x->parent->parent->color = RED;
@@ -157,7 +191,9 @@ class Tree
 
                     }//Case 2 transforms into Case 3
                     //Case 3
-                    cout<<"        uncle("<<uncle->value<<") is black"<<endl;
+                    //
+                    //std::cout<<"        uncle("<<uncle->value<<") is black"<<std::endl;
+                    //
                     x->parent->color = BLACK;
                     x->parent->parent->color = RED;
                     left_rotate(x->parent->parent);
@@ -230,8 +266,8 @@ class Tree
             return;
         else {
             inorder(root->left);
-            if(root->value!=-1)
-                cout << root->value <<" ";
+            if(root->value!="-1")
+                std::cout << root->value <<" ";
             inorder(root->right);
         }
     }
@@ -248,19 +284,19 @@ int main()
        20 40 60 80 */
 
     Tree x;
-    x.insert(10);
-    x.insert(18);
-    x.insert(7);
-    x.insert(15);
-    x.insert(16);
-    x.insert(30);
-    x.insert(25);
-    x.insert(40);
-    x.insert(60);
-    x.insert(2);
-    x.insert(1);
-    x.insert(70);
-    x.inorder(x.root);cout<<endl;
+    x.insert("19BCE0158");
+    x.insert("19BCE0157");
+    x.insert("19BCI0873");
+    x.insert("19BCI0006");
+    x.insert("18BCE0983");
+    x.insert("17BIT0846");
+    x.insert("16BIO9999");
+    x.insert("G.Vishwanathan");
+    x.insert("17BCE9684");
+    x.insert("15BCE0985");
+    x.insert("14BIT0384");
+    x.insert("20BCE0001");
+    x.inorder(x.root);std::cout<<std::endl;
 
     return 0;
 }
