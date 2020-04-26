@@ -8,5 +8,6 @@ A Data Structures project based on Red Black Trees, used to implement an attenda
 
 - Prakhar Soni         - 19BCB0006
 
-Rotations:
+Rotations:   
+
 ![](images/rotation.png)
