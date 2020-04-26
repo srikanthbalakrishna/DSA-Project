@@ -7,3 +7,6 @@ A Data Structures project based on Red Black Trees, used to implement an attenda
 - Srikanth Balakrishna - 19BCE0158
 
 - Prakhar Soni         - 19BCB0006
+
+Rotations:
+![](images/rotation.png)
