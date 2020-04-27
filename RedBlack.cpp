@@ -12,8 +12,6 @@ USEFUL LINKS:
         4] http://staff.ustc.edu.cn/~csli/graduate/algorithms/book6/chap14.htm
 ============================================================
         TO DO:
-        -modify 'value' of node structure to be string type and add a compare() to handle strings
-         and consequently modify all the comparisons used during insertion OR use operator overloading
         -create search() and implement a way to prevent program crash when duplicate is entered
 ============================================================
 */
@@ -64,9 +62,11 @@ class Tree
         bool match = regex_match(reg,expression);
         return match;
     }
+    //validate() ends
+
     void insert(std::string data)
     {
-        if(validate(data))
+        if(validate(data) && !search(root,data) ) //if the data value is a valid Reg.No. and not already present in the Tree
         {
 
         //Note: When comparing two register numbers, we can directly use '>' and '<' on the strings and get the result
@@ -100,10 +100,6 @@ class Tree
             new_node->parent = y;
             y->right = new_node;
         }
-        else //duplicate value
-        {
-            //do nothing
-        }
         //now resolve conflict of adjacent red nodes if occurred
             //
             //std::cout<<data<<" inserted."<<" Resolve conflict if occurred"<<std::endl;
@@ -111,10 +107,10 @@ class Tree
             resolve_insertion(new_node);
 
         }//if for validation ends
-        else
+        else if(!validate(data))
         {
             //VALIDATION FOR INPUT failed
-            std::cout<<"--\""<<data<<"\" is an INVALID reg. no."<<std::endl<<std::endl;
+            std::cout<<"--\""<<data<<"\" is an INVALID Reg.No."<<std::endl<<std::endl;
         }
     }
     //insert() ends
@@ -264,7 +260,8 @@ class Tree
     {
         if (root == NULL)
             return;
-        else {
+        else
+        {
             inorder(root->left);
             if(root->value!="-1")
                 std::cout << root->value <<" ";
@@ -272,6 +269,27 @@ class Tree
         }
     }
     //inorder() ends
+
+    bool search(Node* x, std::string key)
+    {
+        if (x == NULL)
+            return false;
+
+        if (x->value == key)
+            return true;
+
+
+        bool res1 = search(x->left, key); //first checking the left subtree
+
+        if(res1) return true; // key was found so return true and exit search process
+
+
+        bool res2 = search(x->right, key); //key not found on left subtree so check the right subtree
+
+        return res2; //return to the calling search() whether it waas found or not
+    }
+    //search() ends
+
 };
 //class Tree ends
 int main()
@@ -294,8 +312,10 @@ int main()
     x.insert("G.Vishwanathan");
     x.insert("17BCE9684");
     x.insert("15BCE0985");
+    x.insert("17BCE9684");
     x.insert("14BIT0384");
     x.insert("20BCE0001");
+    x.insert("14BIT0384");
     x.inorder(x.root);std::cout<<std::endl;
 
     return 0;
