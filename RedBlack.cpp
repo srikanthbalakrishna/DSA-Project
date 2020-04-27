@@ -67,7 +67,7 @@ class Tree
     }
     //validate() ends
 
-    void insert(std::string data)
+    bool insert(std::string data)  //returns true if data has been inserted, false if invalid/duplicate
     {
         if(validate(data) && !search(root,data) ) //if the data value is a valid Reg.No. and not already present in the Tree
         {
@@ -108,12 +108,13 @@ class Tree
             //std::cout<<data<<" inserted."<<" Resolve conflict if occurred"<<std::endl;
             //
             resolve_insertion(new_node);
-
+            return true;
         }//if for validation ends
         else if(!validate(data))
         {
             //VALIDATION FOR INPUT failed
             std::cout<<"--\""<<data<<"\" is an INVALID Reg.No."<<std::endl<<std::endl;
+            return false;
         }
     }
     //insert() ends
