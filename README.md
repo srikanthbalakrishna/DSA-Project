@@ -21,7 +21,7 @@ A Data Structures project based on Red Black Trees, used to implement an attenda
 Add more general information about project. What the purpose of the project is? Motivation?
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+![Example screenshot](./images/data_structures.png)
 
 ## Technologies
 * Tech 1 - version 1.0
