@@ -12,7 +12,7 @@ USEFUL LINKS:
         4] http://staff.ustc.edu.cn/~csli/graduate/algorithms/book6/chap14.htm
 ============================================================
         TO DO:
-        -create search() and implement a way to prevent program crash when duplicate is entered
+        -create delete() if needed
 ============================================================
 */
 #define RED 1
@@ -43,6 +43,7 @@ class Tree
 
     Node* root;
     Node* nill;
+    std::string date,course_name;
 
     Tree()
     {
@@ -53,6 +54,8 @@ class Tree
         nill = new Node("-1");
         nill->color = BLACK;
         nill->left = nill->right = nill->parent = NULL;
+        date="Date Not Set";
+        course_name="Course Not Set";
     }
     //Tree() Constructor ends
 
@@ -289,34 +292,49 @@ class Tree
         return res2; //return to the calling search() whether it waas found or not
     }
     //search() ends
-
+    void set_Date(std::string date)
+    {
+        this->date = date;
+    }
+    //set_Date() ends
+    void set_CourseName(std::string course_name)
+    {
+        this->course_name = course_name;
+    }
+    //set_CourseName() ends
+    std::string get_Date()
+    {
+        return this->date;
+    }
+    //get_Date() ends
+    std::string get_CourseName()
+    {
+        return this->course_name;
+    }
+    //get_CourseName() ends
 };
 //class Tree ends
 int main()
 {
-    /* Testing example
-            50
-          /   \
-        30      70
-        / \   / \
-       20 40 60 80 */
-
-    Tree x;
-    x.insert("19BCE0158");
-    x.insert("19BCE0157");
-    x.insert("19BCI0873");
-    x.insert("19BCI0006");
-    x.insert("18BCE0983");
-    x.insert("17BIT0846");
-    x.insert("16BIO9999");
-    x.insert("G.Vishwanathan");
-    x.insert("17BCE9684");
-    x.insert("15BCE0985");
-    x.insert("17BCE9684");
-    x.insert("14BIT0384");
-    x.insert("20BCE0001");
-    x.insert("14BIT0384");
-    x.inorder(x.root);std::cout<<std::endl;
+    Tree x[10]; //create 10 classes/courses
+    x[0].set_Date("27/02/2020");
+    x[0].set_CourseName("Data Structures & Algorithms");
+    x[0].insert("19BCE0158");
+    x[0].insert("19BCE0157");
+    x[0].insert("19BCI0873");
+    x[0].insert("19BCI0006");
+    x[0].insert("18BCE0983");
+    x[0].insert("17BIT0846");
+    x[0].insert("16BIO9999");
+    x[0].insert("G.Vishwanathan");
+    x[0].insert("17BCE9684");
+    x[0].insert("15BCE0985");
+    x[0].insert("17BCE9684");
+    x[0].insert("14BIT0384");
+    x[0].insert("20BCE0001");
+    x[0].insert("14BIT0384");
+    x[0].inorder(x[0].root);
+    std::cout<<std::endl;
 
     return 0;
 }
