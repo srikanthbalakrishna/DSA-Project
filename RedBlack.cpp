@@ -20,7 +20,8 @@ USEFUL LINKS:
 #include<iostream>
 #include<string>
 #include<regex>  //Note : THIS REQUIRES ' -std=c++11 ' to be enabled in compiler options
-
+#include<conio.h>
+#include<ctime>
 
 class Tree
 {
@@ -31,34 +32,50 @@ class Tree
         std::string value;
         int color;
         Node *left, *right , *parent;
+        tm* time_of_entry;
 
-        Node(std::string data)  //parametrised constructor
+        Node(std::string data,tm* current_time)  //parametrised constructor
         {
-        value = data;
-        color = RED;    //by default a node will have color as RED
-        left = right = parent = NULL; //redundant
+            time_of_entry = current_time;
+            value = data;
+            color = RED;    //by default a node will have color as RED
+            left = right = parent = NULL; //redundant
+        }
+
+        std::string get_TimeOfEntry()
+        {
+            std::string hours,minutes,seconds;
+            hours   = ( time_of_entry->tm_hour < 10 ) ? ("0" + std::to_string(time_of_entry->tm_hour) ):( std::to_string(time_of_entry->tm_hour) );
+            minutes = ( time_of_entry->tm_min  < 10 ) ? ("0" + std::to_string(time_of_entry->tm_min)  ):( std::to_string(time_of_entry->tm_min)  );
+            seconds = ( time_of_entry->tm_sec  < 10 ) ? ("0" + std::to_string(time_of_entry->tm_sec)  ):( std::to_string(time_of_entry->tm_sec)  );
+            return( hours + ":" + minutes +":"+ seconds );
         }
     };
     //Node class ends
 
     Node* root;
     Node* nill;
-    std::string date,course_name;
+    private:
+    tm* date_of_recording;  //stores the date at which the attendance was recorded
+    std::string course_name;
 
+    public:
     Tree()
     {
         root = NULL;
         //
-        //std::cout<<"Red - "<<RED<<" and Black - "<<BLACK<<std::endl<<std::endl;
+        time_t time_of_program_start;
+        date_of_recording = localtime(&time_of_program_start);
         //
-        nill = new Node("-1");
+        tm* time = localtime(&time_of_program_start);
+        nill = new Node("-1",time);
         nill->color = BLACK;
         nill->left = nill->right = nill->parent = NULL;
-        date="Date Not Set";
         course_name="Course Not Set";
+        //
     }
     //Tree() Constructor ends
-
+    private:
     bool validate(std::string reg)
     {
         std:: regex expression("[[:d:]]{2}[a-zA-Z]{3}[[:d:]]{4}");
@@ -67,43 +84,46 @@ class Tree
     }
     //validate() ends
 
+    public:
     bool insert(std::string data)  //returns true if data has been inserted, false if invalid/duplicate
     {
-        if(validate(data) && !search(root,data) ) //if the data value is a valid Reg.No. and not already present in the Tree
+        if(validate(data) && search(root,data)==NULL ) //if the data value is a valid Reg.No. and not already present in the Tree
         {
 
-        //Note: When comparing two register numbers, we can directly use '>' and '<' on the strings and get the result
-        Node* new_node = new Node(data);
-        new_node->left = nill;
-        new_node->right = nill;
-        Node* x = root;
-        Node* y = NULL;
-            //obtain point of insertion --> 'y'
-            while (x != NULL && x!= nill)
+            //Note: When comparing two register numbers, we can directly use '>' and '<' on the strings and get the result
+            time_t now = time(0);
+            tm* current_time = localtime(&now);
+            Node* new_node = new Node(data,current_time);
+            new_node->left = nill;
+            new_node->right = nill;
+            Node* x = root;
+            Node* y = NULL;
+                //obtain point of insertion --> 'y'
+                while (x != NULL && x!= nill)
+                {
+                    y = x;
+                    if (data < x->value)
+                        x = x->left;
+                    else
+                        x = x->right;
+                }
+            //point of insertion is obtained --> 'y'
+            if (y == NULL) //tree is empty, assign newnode as root
             {
-                y = x;
-                if (data < x->value)
-                    x = x->left;
-                else
-                    x = x->right;
+                new_node->color = BLACK;
+                root = new_node;
             }
-        //point of insertion is obtained --> 'y'
-        if (y == NULL) //tree is empty, assign newnode as root
-        {
-            new_node->color = BLACK;
-            root = new_node;
-        }
-        else if (data < y->value) //assign as left child
-        {
-            new_node->parent = y;
-            y->left = new_node;
-        }
-        else if (data > y->value) //assign as right child
-        {
-            new_node->parent = y;
-            y->right = new_node;
-        }
-        //now resolve conflict of adjacent red nodes if occurred
+            else if (data < y->value) //assign as left child
+            {
+                new_node->parent = y;
+                y->left = new_node;
+            }
+            else if (data > y->value) //assign as right child
+            {
+                new_node->parent = y;
+                y->right = new_node;
+            }
+            //now resolve conflict of adjacent red nodes if occurred
             //
             //std::cout<<data<<" inserted."<<" Resolve conflict if occurred"<<std::endl;
             //
@@ -119,6 +139,7 @@ class Tree
     }
     //insert() ends
 
+    private:
     void resolve_insertion(Node *x)
     {
        int counter = 1;
@@ -260,6 +281,7 @@ class Tree
     }
     //right rotate ends
 
+    public:
     void inorder(Node* root)
     {
         if (root == NULL)
@@ -268,57 +290,65 @@ class Tree
         {
             inorder(root->left);
             if(root->value!="-1")
-                std::cout << root->value <<" ";
+                std::cout << root->value <<" "<<root->get_TimeOfEntry()<<std::endl;
             inorder(root->right);
         }
     }
     //inorder() ends
 
-    bool search(Node* x, std::string key)
+    Node *search(Node* x, std::string key)
     {
-        if (x == NULL)
-            return false;
+        if (x == NULL)  //not found
+            return NULL;
 
-        if (x->value == key)
-            return true;
-
-
-        bool res1 = search(x->left, key); //first checking the left subtree
-
-        if(res1) return true; // key was found so return true and exit search process
+        if (x->value == key) //found , returns a pointer to the node
+            return x;
 
 
-        bool res2 = search(x->right, key); //key not found on left subtree so check the right subtree
+        Node* res1 = search(x->left, key); //first checking the left subtree
+
+        if(res1) return x; // key was found so return pointer to the node and exit search process
+
+
+        Node*res2 = search(x->right, key); //key not found on left subtree so check the right subtree
 
         return res2; //return to the calling search() whether it waas found or not
     }
     //search() ends
-    void set_Date(std::string date)
-    {
-        this->date = date;
-    }
-    //set_Date() ends
+
     void set_CourseName(std::string course_name)
     {
         this->course_name = course_name;
     }
     //set_CourseName() ends
-    std::string get_Date()
-    {
-        return this->date;
-    }
-    //get_Date() ends
+
     std::string get_CourseName()
     {
         return this->course_name;
     }
     //get_CourseName() ends
+
 };
 //class Tree ends
 int main()
 {
-    Tree x[10]; //create 10 classes/courses
-    x[0].set_Date("27/02/2020");
+    /*
+        public functions of Tree Class available for use:
+        -inorder( Node* n )            --> performs inorder traversal starting from the node passed to it(so we pass the root node to it to
+                                           traverse the whole tree)
+        -insert( string x )            --> inserts a node in the redBlack tree. The node automatically stores the time at which it was inserted
+        -set_CourseName( string x )    --> sets the name of the course to be the passed string (e.g: DLD, DSA or even "SJT building" if needed)
+        -get_CoourseName()             --> returns a string containing coursename
+        -search(Node* root,string reg) --> the first parameter must be the root. The second parameter is the register no. of the
+                                             student being searched.
+                                             If student is found,   function returns a pointer to the Node
+                                                                    else it returns NULL
+        functions of Node Class available for use:
+        -get_TimeOfEntry()  --> returns a string containing the time of entry for the student
+                                can be used to get the time at which a particular student/Node entered their attendance
+
+    */
+    Tree x[10]; //create 10 classes/courses and automatically sets todays date as the date at which attendance is recorded
     x[0].set_CourseName("Data Structures & Algorithms");
     x[0].insert("19BCE0158");
     x[0].insert("19BCE0157");
@@ -334,9 +364,8 @@ int main()
     x[0].insert("14BIT0384");
     x[0].insert("20BCE0001");
     x[0].insert("14BIT0384");
-    x[0].inorder(x[0].root);
-    std::cout<<std::endl;
-
+    x[0].inorder(x[0].root);        //DISPLAY Tree
+    getch();
     return 0;
 }
 //main ends

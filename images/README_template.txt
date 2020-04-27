@@ -1,14 +1,8 @@
-# DATA STRUCTURES & ALGORITHMS PROJECT L43+L44
-
-> DSA-Project
-A Data Structures project based on Red Black Trees, used to implement an attendance system for students.
-- Srikanth Balakrishna - 19BCE0158
-
-- Prakhar Soni         - 19BCB0006
-  
+# Project Name
+> Here goes your awesome project description!
 
 ## Table of contents
-* [Code description](#code-description)
+* [General info](#general-info)
 * [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Setup](#setup)
