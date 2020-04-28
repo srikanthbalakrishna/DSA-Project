@@ -419,7 +419,7 @@ int main()
         }
         else
         {
-            cout << "> Not a valid command.\n";
+            cout << "Not a valid command.\n";
         }
         cout<<"\n";
     } while (true);
