@@ -55,6 +55,7 @@ class Tree
 
     Node* root;
     Node* nill;
+    Node* searchNode;
     private:
     tm* date_of_recording;  //stores the date at which the attendance was recorded
     std::string course_name;
@@ -133,7 +134,7 @@ class Tree
         else if(!validate(data))
         {
             //VALIDATION FOR INPUT failed
-            std::cout<<"--\""<<data<<"\" is an INVALID Reg.No."<<std::endl<<std::endl;
+            std::cout<<"\n--\""<<data<<"\" is an INVALID Reg.No."<<std::endl;
             return false;
         }
     }
@@ -290,7 +291,7 @@ class Tree
         {
             inorder(root->left);
             if(root->value!="-1")
-                std::cout << root->value <<" "<<root->get_TimeOfEntry()<<std::endl;
+                std::cout <<"\nReg No: "<< root->value <<"\nTimestamp: "<<root->get_TimeOfEntry()<<std::endl;
             inorder(root->right);
         }
     }
@@ -298,16 +299,21 @@ class Tree
 
     Node *search(Node* x, std::string key)
     {
-        if (x == NULL)  //not found
+        if (x == NULL){
             return NULL;
+        }  //not found
 
-        if (x->value == key) //found , returns a pointer to the node
+        if (x->value == key){
             return x;
+        } //found , returns a pointer to the node
+            
 
 
         Node* res1 = search(x->left, key); //first checking the left subtree
 
-        if(res1) return x; // key was found so return pointer to the node and exit search process
+        if(res1){
+            return x;
+        } // key was found so return pointer to the node and exit search process
 
 
         Node*res2 = search(x->right, key); //key not found on left subtree so check the right subtree
@@ -364,7 +370,38 @@ int main()
     x[0].insert("14BIT0384");
     x[0].insert("20BCE0001");
     x[0].insert("14BIT0384");
-    x[0].inorder(x[0].root);        //DISPLAY Tree
+    int ch;
+    while(ch != 6){
+        std::cout<<"\nEnter your Choice:\n1.Insert Record\n2.Search for a Record\n3.Display Inorder\n4.Exit\n\n";
+        std::cin>>ch;
+        if(ch == 1){
+            std::string data;
+            std::cout<<"\nWhat is the Registration Number you want to insert: ";
+            std::cin>>data;
+            x[0].insert(data);
+        }
+        else if(ch == 2){
+            std::string searchdata;
+            std::cout<<"\nEnter the Reg No. to search for: ";
+            std::cin>>searchdata;
+            x[0].searchNode = x[0].search(x[0].root, searchdata);
+            if(x[0].searchNode == NULL){
+                std::cout<<"\nThere is no such record!\n";
+            }
+            else{
+                std::cout <<"\nRecord Found!\nReg No: "<< x[0].searchNode->value <<"\nTimestamp: "<<x[0].searchNode->get_TimeOfEntry()<<std::endl;
+            }
+        }
+        else if(ch == 3){
+            x[0].inorder(x[0].root);
+        }
+        else if(ch == 4){
+            return 0;
+        }
+        else{
+            return 0;
+        }
+    }
     getch();
     return 0;
 }
