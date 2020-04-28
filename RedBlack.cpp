@@ -23,18 +23,20 @@ USEFUL LINKS:
 #include<conio.h>
 #include<ctime>
 #include<windows.h>
+
+using namespace std;
 class Tree
 {
     public:
     class Node
     {
         public:
-        std::string value;
+        string value;
         int color;
         Node *left, *right , *parent;
         tm* time_of_entry;
 
-        Node(std::string data,tm* current_time)  //parametrised constructor
+        Node(string data,tm* current_time)  //parametrised constructor
         {
             time_of_entry = current_time;
             value = data;
@@ -42,12 +44,12 @@ class Tree
             left = right = parent = NULL; //redundant
         }
 
-        std::string get_TimeOfEntry()
+        string get_TimeOfEntry()
         {
-            std::string hours,minutes,seconds;
-            hours   = ( time_of_entry->tm_hour < 10 ) ? ("0" + std::to_string(time_of_entry->tm_hour) ):( std::to_string(time_of_entry->tm_hour) );
-            minutes = ( time_of_entry->tm_min  < 10 ) ? ("0" + std::to_string(time_of_entry->tm_min)  ):( std::to_string(time_of_entry->tm_min)  );
-            seconds = ( time_of_entry->tm_sec  < 10 ) ? ("0" + std::to_string(time_of_entry->tm_sec)  ):( std::to_string(time_of_entry->tm_sec)  );
+            string hours,minutes,seconds;
+            hours   = ( time_of_entry->tm_hour < 10 ) ? ("0" + to_string(time_of_entry->tm_hour) ):( to_string(time_of_entry->tm_hour) );
+            minutes = ( time_of_entry->tm_min  < 10 ) ? ("0" + to_string(time_of_entry->tm_min)  ):( to_string(time_of_entry->tm_min)  );
+            seconds = ( time_of_entry->tm_sec  < 10 ) ? ("0" + to_string(time_of_entry->tm_sec)  ):( to_string(time_of_entry->tm_sec)  );
             return( hours + ":" + minutes +":"+ seconds );
         }
     };
@@ -58,7 +60,7 @@ class Tree
     Node* searchNode;
     private:
     tm* date_of_recording;  //stores the date at which the attendance was recorded
-    std::string course_name;
+    string course_name;
 
     public:
     Tree()
@@ -77,16 +79,16 @@ class Tree
     }
     //Tree() Constructor ends
     private:
-    bool validate(std::string reg)
+    bool validate(string reg)
     {
-        std:: regex expression("[[:d:]]{2}[a-zA-Z]{3}[[:d:]]{4}");
+         regex expression("[[:d:]]{2}[a-zA-Z]{3}[[:d:]]{4}");
         bool match = regex_match(reg,expression);
         return match;
     }
     //validate() ends
 
     public:
-    bool insert(std::string data)  //returns true if data has been inserted, false if invalid/duplicate
+    bool insert(string data)  //returns true if data has been inserted, false if invalid/duplicate
     {
         if(validate(data) && search(root,data)==NULL ) //if the data value is a valid Reg.No. and not already present in the Tree
         {
@@ -126,7 +128,7 @@ class Tree
             }
             //now resolve conflict of adjacent red nodes if occurred
             //
-            //std::cout<<data<<" inserted."<<" Resolve conflict if occurred"<<std::endl;
+            //cout<<data<<" inserted."<<" Resolve conflict if occurred"<<endl;
             //
             resolve_insertion(new_node);
             return true;
@@ -134,7 +136,7 @@ class Tree
         else if(!validate(data))
         {
             //VALIDATION FOR INPUT failed
-            std::cout<<"\n--\""<<data<<"\" is an INVALID Reg.No."<<std::endl;
+            cout<<"\n--\""<<data<<"\" is an INVALID Reg.No."<<endl;
             return false;
         }
     }
@@ -148,20 +150,20 @@ class Tree
        while(x != root && x->parent->color == RED)
        {
             //
-            //std::cout<<"    Iteration "<<counter++<<": Conflict occurred for "<<x->value<<std::endl;
+            //cout<<"    Iteration "<<counter++<<": Conflict occurred for "<<x->value<<endl;
             //
             if( x->parent == x->parent->parent->left ) //if parent of 'x' is a left child
             {       //
-                    //std::cout<<"       parent("<<x->parent->value<<") is a LEFT child"<<std::endl;
+                    //cout<<"       parent("<<x->parent->value<<") is a LEFT child"<<endl;
                     //
                     uncle = x->parent->parent->right;
                     //
-                    //std::cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<std::endl;
+                    //cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<endl;
                     //
                     if(uncle->color == RED ) //CASE 1
                     {
                         //
-                        //std::cout<<"        uncle("<<uncle->value<<") is red"<<uncle->color<<std::endl;
+                        //cout<<"        uncle("<<uncle->value<<") is red"<<uncle->color<<endl;
                         //
                         x->parent->color = BLACK;
                         uncle->color = BLACK;
@@ -177,7 +179,7 @@ class Tree
                     }//Case 2 transforms into Case 3
                     //Case 3 - 'x' is a left child and uncle is black/NULL
                     //
-                    //std::cout<<"        uncle("<<uncle->value<<") is black"<<std::endl;
+                    //cout<<"        uncle("<<uncle->value<<") is black"<<endl;
                     //
                     x->parent->color = BLACK;
                     x->parent->parent->color = RED;
@@ -188,16 +190,16 @@ class Tree
             else    //if parent of 'x' is a right child
             {   //interchanging left <--> right from above block
                     //
-                    //std::cout<<"       parent("<<x->parent->value<<") is a RIGHT child"<<std::endl;
+                    //cout<<"       parent("<<x->parent->value<<") is a RIGHT child"<<endl;
                     //
                     uncle = x->parent->parent->left;
                     //
-                    //std::cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<std::endl;
+                    //cout<<"       uncle("<<uncle->value<<") is of color "<<uncle->color<<endl;
                     //
                     if( uncle->color == RED) //CASE 1
                     {
                         //
-                        //std::cout<<"        uncle("<<uncle->value<<") is red"<<std::endl;
+                        //cout<<"        uncle("<<uncle->value<<") is red"<<endl;
                         //
                         x->parent->color = BLACK;
                         uncle->color = BLACK;
@@ -214,7 +216,7 @@ class Tree
                     }//Case 2 transforms into Case 3
                     //Case 3
                     //
-                    //std::cout<<"        uncle("<<uncle->value<<") is black"<<std::endl;
+                    //cout<<"        uncle("<<uncle->value<<") is black"<<endl;
                     //
                     x->parent->color = BLACK;
                     x->parent->parent->color = RED;
@@ -291,13 +293,13 @@ class Tree
         {
             inorder(root->left);
             if(root->value!="-1")
-                std::cout <<"\nReg No: "<< root->value <<"\nTimestamp: "<<root->get_TimeOfEntry()<<std::endl;
+                cout <<"\nReg No: "<< root->value <<"\nTimestamp: "<<root->get_TimeOfEntry()<<endl;
             inorder(root->right);
         }
     }
     //inorder() ends
 
-    Node *search(Node* x, std::string key)
+    Node *search(Node* x, string key)
     {
         if (x == NULL){
             return NULL;
@@ -322,13 +324,13 @@ class Tree
     }
     //search() ends
 
-    void set_CourseName(std::string course_name)
+    void set_CourseName(string course_name)
     {
         this->course_name = course_name;
     }
     //set_CourseName() ends
 
-    std::string get_CourseName()
+    string get_CourseName()
     {
         return this->course_name;
     }
@@ -373,25 +375,25 @@ int main()
     int ch;
     while(ch != 6){
         system("cls");
-        std::cout<<"Enter your Choice:\n1.Insert Record\n2.Search for a Record\n3.Display Inorder\n4.Exit\n\n";
-        std::cin>>ch;
+        cout<<"Enter your Choice:\n1.Insert Record\n2.Search for a Record\n3.Display Inorder\n4.Exit\n\n";
+        cin>>ch;
         if(ch == 1){
-            std::string data;
-            std::cout<<"\nWhat is the Registration Number you want to insert: ";
-            std::cin>>data;
+            string data;
+            cout<<"\nWhat is the Registration Number you want to insert: ";
+            cin>>data;
             x[0].insert(data);
-            std::cout<<"\nRecord Inserted Successfully!\n";
+            cout<<"\nRecord Inserted Successfully!\n";
         }
         else if(ch == 2){
-            std::string searchdata;
-            std::cout<<"\nEnter the Reg No. to search for: ";
-            std::cin>>searchdata;
+            string searchdata;
+            cout<<"\nEnter the Reg No. to search for: ";
+            cin>>searchdata;
             x[0].searchNode = x[0].search(x[0].root, searchdata);
             if(x[0].searchNode == NULL){
-                std::cout<<"\nThere is no such record!\n";
+                cout<<"\nThere is no such record!\n";
             }
             else{
-                std::cout <<"\nRecord Found!\nReg No: "<< x[0].searchNode->value <<"\nTimestamp: "<<x[0].searchNode->get_TimeOfEntry()<<std::endl;
+                cout <<"\nRecord Found!\nReg No: "<< x[0].searchNode->value <<"\nTimestamp: "<<x[0].searchNode->get_TimeOfEntry()<<endl;
             }
         }
         else if(ch == 3){
@@ -403,7 +405,7 @@ int main()
         else{
             return 0;
         }
-        std::cout<<"\nPress any key to Continue\n";
+        cout<<"\nPress any key to Continue\n";
         while (!kbhit);
             char dummy = getch();
     }
