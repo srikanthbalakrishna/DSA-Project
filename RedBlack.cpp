@@ -22,7 +22,7 @@ USEFUL LINKS:
 #include<regex>  //Note : THIS REQUIRES ' -std=c++11 ' to be enabled in compiler options
 #include<conio.h>
 #include<ctime>
-
+#include<windows.h>
 class Tree
 {
     public:
@@ -372,7 +372,8 @@ int main()
     x[0].insert("14BIT0384");
     int ch;
     while(ch != 6){
-        std::cout<<"\nEnter your Choice:\n1.Insert Record\n2.Search for a Record\n3.Display Inorder\n4.Exit\n\n";
+        system("cls");
+        std::cout<<"Enter your Choice:\n1.Insert Record\n2.Search for a Record\n3.Display Inorder\n4.Exit\n\n";
         std::cin>>ch;
         if(ch == 1){
             std::string data;
@@ -401,6 +402,9 @@ int main()
         else{
             return 0;
         }
+        std::cout<<"\nPress any key to Continue\n";
+        while (!kbhit);
+            char dummy = getch();
     }
     getch();
     return 0;
