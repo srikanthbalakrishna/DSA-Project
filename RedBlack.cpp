@@ -312,7 +312,7 @@ class Tree
         Node* res1 = search(x->left, key); //first checking the left subtree
 
         if(res1){
-            return x;
+            return res1;
         } // key was found so return pointer to the node and exit search process
 
 
@@ -380,6 +380,7 @@ int main()
             std::cout<<"\nWhat is the Registration Number you want to insert: ";
             std::cin>>data;
             x[0].insert(data);
+            std::cout<<"\nRecord Inserted Successfully!\n";
         }
         else if(ch == 2){
             std::string searchdata;
