@@ -306,17 +306,18 @@ class Tree
         if (x->value == key){
             return x;
         } //found , returns a pointer to the node
-            
+
 
 
         Node* res1 = search(x->left, key); //first checking the left subtree
 
-        if(res1){
-            return x;
+        if(res1)
+        {
+            return res1;
         } // key was found so return pointer to the node and exit search process
 
 
-        Node*res2 = search(x->right, key); //key not found on left subtree so check the right subtree
+        Node* res2 = search(x->right, key); //key not found on left subtree so check the right subtree
 
         return res2; //return to the calling search() whether it waas found or not
     }
@@ -356,20 +357,6 @@ int main()
     */
     Tree x[10]; //create 10 classes/courses and automatically sets todays date as the date at which attendance is recorded
     x[0].set_CourseName("Data Structures & Algorithms");
-    x[0].insert("19BCE0158");
-    x[0].insert("19BCE0157");
-    x[0].insert("19BCI0873");
-    x[0].insert("19BCI0006");
-    x[0].insert("18BCE0983");
-    x[0].insert("17BIT0846");
-    x[0].insert("16BIO9999");
-    x[0].insert("G.Vishwanathan");
-    x[0].insert("17BCE9684");
-    x[0].insert("15BCE0985");
-    x[0].insert("17BCE9684");
-    x[0].insert("14BIT0384");
-    x[0].insert("20BCE0001");
-    x[0].insert("14BIT0384");
     int ch;
     while(ch != 6){
         std::cout<<"\nEnter your Choice:\n1.Insert Record\n2.Search for a Record\n3.Display Inorder\n4.Exit\n\n";
