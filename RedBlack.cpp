@@ -25,19 +25,34 @@ USEFUL LINKS:
 #include <windows.h>
 
 using namespace std;
+
+string get_new_time(time_t past)
+{
+    time_t present = time(&past);
+    tm *current_time = localtime(&present);
+    string hours,minutes,seconds,time_of_insertion;
+    hours = (current_time->tm_hour < 10) ? ("0" + to_string(current_time->tm_hour)) : (to_string(current_time->tm_hour));
+    minutes = (current_time->tm_min < 10) ? ("0" + to_string(current_time->tm_min)) : (to_string(current_time->tm_min));
+    seconds = (current_time->tm_sec < 10) ? ("0" + to_string(current_time->tm_sec)) : (to_string(current_time->tm_sec));
+    time_of_insertion = (hours + ":" + minutes + ":" + seconds) ; //storing time of insertion
+
+    return time_of_insertion;
+}
+
 class Tree
 {
 public:
     class Node
     {
     public:
-        string value,time;
+        string value,time,status;
         int color;
         Node *left, *right, *parent;
         tm *time_of_entry;
 
         Node(string data, string t) //parametrised constructor
         {
+            status = "IN";
             time = t;;
             value = data;
             color = RED;                  //by default a node will have color as RED
@@ -142,6 +157,15 @@ public:
             //VALIDATION FOR INPUT failed
             cout << "--\"" << data << "\" is an INVALID Reg.No." << endl;
             return false;
+        }
+        else if (search(root, data) != NULL)
+        {
+            //update timestamp and change status to OUT
+            time_t now = time(0);
+            Node* x = search(root,data);
+            x->time = get_new_time(now);
+            x->status = "OUT";
+
         }
     }
     //insert() ends
@@ -292,7 +316,7 @@ public:
         {
             inorder(root->left);
             if (root->value != "-1")
-                cout << "\nReg No: " << root->value << "\nTimestamp: " << root->get_TimeOfEntry() << endl;
+                cout << "\nReg No: " << root->value << "\nTimestamp: " << root->get_TimeOfEntry() << "\nStatus: " << root->status<<endl;
             if(root->value == "-1"){
                 return true;
             }
@@ -339,19 +363,6 @@ public:
     //get_CourseName() ends
 };
 //class Tree ends
-
-string get_new_time(time_t past)
-{
-    time_t present = time(&past);
-    tm *current_time = localtime(&present);
-    string hours,minutes,seconds,time_of_insertion;
-    hours = (current_time->tm_hour < 10) ? ("0" + to_string(current_time->tm_hour)) : (to_string(current_time->tm_hour));
-    minutes = (current_time->tm_min < 10) ? ("0" + to_string(current_time->tm_min)) : (to_string(current_time->tm_min));
-    seconds = (current_time->tm_sec < 10) ? ("0" + to_string(current_time->tm_sec)) : (to_string(current_time->tm_sec));
-    time_of_insertion = (hours + ":" + minutes + ":" + seconds) ; //storing time of insertion
-
-    return time_of_insertion;
-}
 
 int main()
 {
