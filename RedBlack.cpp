@@ -26,9 +26,9 @@ USEFUL LINKS:
 
 using namespace std;
 
-string get_new_time(time_t past)
+string get_new_time()
 {
-    time_t present = time(&past);
+    time_t present = time(0);
     tm *current_time = localtime(&present);
     string hours,minutes,seconds,time_of_insertion;
     hours = (current_time->tm_hour < 10) ? ("0" + to_string(current_time->tm_hour)) : (to_string(current_time->tm_hour));
@@ -161,9 +161,8 @@ public:
         else if (search(root, data) != NULL)
         {
             //update timestamp and change status to OUT
-            time_t now = time(0);
             Node* x = search(root,data);
-            x->time = get_new_time(now);
+            x->time = get_new_time();
             x->status = "OUT";
 
         }
@@ -385,7 +384,6 @@ int main()
     */
     Tree x; //create a class and automatically set todays date as the date at which attendance is recorded
     x.set_CourseName("SJT Building Attendance");
-    time_t now = time(0);
     ////
     system("cls");
     //cout<<"Course:"<<x.get_CourseName()<<endl<<x.get_Date()<<endl;
@@ -407,7 +405,7 @@ int main()
         if (input[0] == "insert" || input[0] == "Insert")
         {
 
-            if(  x.insert(input[1],get_new_time(now)) )
+            if(  x.insert(input[1],get_new_time()) )
             {
                 cout << "Record Inserted Successfully!\n";
             }
