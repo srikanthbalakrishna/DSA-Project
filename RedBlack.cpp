@@ -388,7 +388,7 @@ int main()
     time_t now = time(0);
     ////
     system("cls");
-    cout<<"Course:"<<x.get_CourseName()<<endl<<x.get_Date()<<endl;
+    //cout<<"Course:"<<x.get_CourseName()<<endl<<x.get_Date()<<endl;
     cout<<"Commands(not case sensitive):\ninsert <Reg No. to insert>\nsearch <Reg No. to search for>\ndisplay\ncls(Clear Screen)\nexit\n\n";
     do
     {
@@ -428,7 +428,7 @@ int main()
         {
             if(!x.inorder(x.root))
             {
-                cout<<"There are no records!\n";
+                cout<<"There are no more records!\n";
             }
         }
         else if (input[0] == "exit" || input[0] == "Exit")
