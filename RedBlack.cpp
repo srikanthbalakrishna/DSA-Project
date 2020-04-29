@@ -161,6 +161,7 @@ public:
         else if (search(root, data) != NULL)
         {
             //update timestamp and change status to OUT
+
             Node* x = search(root,data);
             x->time = get_new_time();
             x->status = "OUT";
@@ -315,7 +316,7 @@ public:
         {
             inorder(root->left);
             if (root->value != "-1")
-                cout << "\nReg No: " << root->value << "\nTimestamp: " << root->get_TimeOfEntry() << "\nStatus: " << root->status<<endl;
+                cout << "Reg No: " << root->value << "\nTimestamp: " << root->get_TimeOfEntry() << "\nStatus: " << root->status<<endl<<endl;
             if(root->value == "-1"){
                 return true;
             }
@@ -419,7 +420,7 @@ int main()
             }
             else
             {
-                cout << "Record Found!\nReg No: " << x.searchNode->value << "\nTimestamp: " << x.searchNode->get_TimeOfEntry() << endl;
+                cout << "Record Found!\nReg No: " << x.searchNode->value << "\nTimestamp: " << x.searchNode->get_TimeOfEntry() <<"\nStatus: "<< x.searchNode->status<< endl;
             }
         }
         else if (input[0] == "display" || input[0] == "Display")
